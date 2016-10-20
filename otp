@@ -1,0 +1,23 @@
+#!/bin/bash
+
+mkdir -p ~/.config/otp
+
+if [ ! -f ~/.config/otp/counter ]
+then
+    echo 0 > ~/.config/otp/counter
+    chmod 600 ~/.config/otp/counter
+fi
+
+if [ ! -f ~/.config/otp/secret ]
+then
+    touch ~/.config/otp/secret
+    chmod 600 ~/.config/otp/secret
+    echo -n 'No 2FA found, enter new secret: '; read x
+    echo "$x" > ~/.config/otp/secret
+    unset x
+    chmod 400 ~/.config/otp/secret
+fi
+
+notify-send "2FA OTP copied to clipboard: $(oathtool -c $(cat ~/.config/otp/counter) -b $(cat ~/.config/otp/secret) | xclip -f -selection clipboard)"
+
+echo $(($(cat ~/.config/otp/counter) +1)) > ~/.config/otp/counter
