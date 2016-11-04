@@ -1,23 +1,36 @@
-#!/bin/bash
+#!/bin/bash -e
 
+SECRET=~/.config/otp/secret
+COUNTER=~/.config/otp/counter
 mkdir -p ~/.config/otp
 
-if [ ! -f ~/.config/otp/counter ]
-then
-    echo 0 > ~/.config/otp/counter
-    chmod 600 ~/.config/otp/counter
-fi
+input_to_file() {
+    # if the given file does not exist, create it from user
+    # input, with the given prompt and optional default
+    local filename=$1
+    local prompt=$2
+    local default=${3:-""}
+    if [ ! -f "$filename" ]; then
+        local input=""
+        touch $filename
+        chmod 600 $filename
+        echo -n "$prompt"
+        read input
+        if test -z "$input"; then
+            input=$default
+        fi
+        echo $input > $filename
+    fi
+}
 
-if [ ! -f ~/.config/otp/secret ]
-then
-    touch ~/.config/otp/secret
-    chmod 600 ~/.config/otp/secret
-    echo -n 'No 2FA found, enter new secret: '; read x
-    echo "$x" > ~/.config/otp/secret
-    unset x
-    chmod 400 ~/.config/otp/secret
-fi
+which oathtool >/dev/null || { echo 'Please install oathtool'; exit 1; }
 
-notify-send "2FA OTP copied to clipboard: $(oathtool -c $(cat ~/.config/otp/counter) -b $(cat ~/.config/otp/secret) | xclip -f -selection clipboard)"
+input_to_file $SECRET 'No 2FA found, enter new secret: '
+chmod 400 $SECRET
+input_to_file $COUNTER 'Start at counter (default=0): ' 0
 
-echo $(($(cat ~/.config/otp/counter) +1)) > ~/.config/otp/counter
+OTP=$(oathtool -c $(cat $COUNTER) -b $(cat $SECRET))
+echo $(($(cat $COUNTER) + 1)) > $COUNTER
+
+echo $OTP
+notify-send "2FA OTP copied to clipboard: $(echo $OTP | xclip -f -selection clipboard || echo 'Not possible, please install xclip')"
