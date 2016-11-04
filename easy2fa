@@ -33,4 +33,4 @@ OTP=$(oathtool -c $(cat $COUNTER) -b $(cat $SECRET))
 echo $(($(cat $COUNTER) + 1)) > $COUNTER
 
 echo $OTP
-notify-send "2FA OTP copied to clipboard: $(echo $OTP | xclip -f -selection clipboard || echo 'Not possible, please install xclip')"
+notify-send "2FA copied to clipboard: $(echo $OTP | xclip -f -selection clipboard || echo 'Not possible, please install xclip')"
