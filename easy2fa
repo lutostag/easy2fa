@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
-SECRET=~/.config/otp/secret
-COUNTER=~/.config/otp/counter
-mkdir -p ~/.config/otp
+SECRET=~/.config/easy2fa/secret
+COUNTER=~/.config/easy2fa/counter
+mkdir -p ~/.config/easy2fa
 
 input_to_file() {
     # if the given file does not exist, create it from user

@@ -1,6 +1,6 @@
-name: otp
+name: easy2fa
 version: master
-summary: A simple wrapper around oathtool for two-factor-auth
+summary: Easy to use two-factor-auth client for cli
 description: |
   A simple wrapper around oathtool for two-factor-auth. Please run
   it once from the commandline to set up.
@@ -8,13 +8,13 @@ grade: devel
 confinement: strict
 
 apps:
-  otp:
-    command: otp
+  easy2fa:
+    command: easy2fa
     plugs: [ unity7 ]
 
 parts:
   otp:
-    source: git://github.com/lutostag/otp
+    source: git://github.com/lutostag/easy2fa
     plugin: dump
     stage-packages:
       - oathtool

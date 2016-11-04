@@ -9,9 +9,9 @@ sudo apt install oathtool xclip
 
 simply install by:
 ```
-sudo cp otp /usr/local/bin
+sudo cp easy2fa /usr/local/bin
 ```
 
-Settings are stored in "~/.config/otp/", there two files hold the counter and secret respectively.
+Settings are stored in "~/.config/easy2fa/", there two files hold the counter and secret respectively.
 
-Released under the MIT License. Original repository @ https://github.com/lutostag/otp
+Released under the MIT License. Original repository @ https://github.com/lutostag/easy2fa
