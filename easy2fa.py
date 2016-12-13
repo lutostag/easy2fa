@@ -5,9 +5,28 @@ import sys
 import argparse
 import subprocess
 import yaml
+import textwrap
 
 SHELF = os.path.expanduser('~/.config/easy2fa/accounts')
-RESERVED = ['list', 'add', 'remove', 'default', 'generate']
+RESERVED = ['generate', 'add', 'remove', 'list', 'default']
+EPILOG = textwrap.dedent("""\
+commands:
+  (default:generate)
+
+  generate  Generate one time password for an account
+  add       Add an account
+  remove    Remove an account
+  list      List accounts
+  default   Set default account
+
+optional arguments:
+  account          Name of account to be used with any of the above commands
+		   (except 'list', for which it is ignored). If not provided,
+		   will use default or fall back to asking interactively.
+  -h, --help       Show this help message and exit
+
+The accounts are stored in a yaml file located at '~/.config/easy2fa/accounts'
+""")
 
 
 def check_input(prompt, assertion=None, default=None):
@@ -193,26 +212,39 @@ class AccountStorage(object):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('account', nargs='?', help='name of account')
-    subparsers = parser.add_subparsers(dest='command', help='sub-command help')
-    add = subparsers.add_parser('add', help='Add an account')
-    remove = subparsers.add_parser('remove', help='Remove an account')
-    list_ = subparsers.add_parser('list', help='List accounts ')
-    default = subparsers.add_parser('default', help='Set default account')
-    generate = subparsers.add_parser('generate',
-                                     help='Generate otp for account')
-    return parser.parse_args()
+    parser = argparse.ArgumentParser(add_help=False, prefix_chars='-garld',
+        allow_abbrev=False, description='A simple two-factor auth client.',
+        usage="easy2fa [-h] [command] [account]", epilog=EPILOG,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+
+    parser.add_argument('--help', help=argparse.SUPPRESS, action='help')
+    parser.add_argument('-h', help=argparse.SUPPRESS, action='help')
+
+    commands = parser.add_mutually_exclusive_group()
+    for command in RESERVED:
+        commands.add_argument(command, metavar=command, action='store_const',
+                              const=command, dest='command',
+                              help=argparse.SUPPRESS)
+
+    opts, extra = parser.parse_known_args()
+    command = 'generate'
+    account = None
+    if opts.command:
+        command = opts.command
+    if len(extra) > 1:
+        parser.print_usage()
+        sys.exit(2)
+    elif len(extra) == 1:
+        account = extra.pop()
+    return (command, account)
 
 
 def main():
-    opts = parse_args()
-    command = 'generate'
-    if opts.command:
-        command = opts.command
-    accountstorage = AccountStorage(SHELF)
-    accountstorage.chosen_account = opts.account
-    return getattr(accountstorage, command)()
+    command, account = parse_args()
+    print(command, account)
+    accountStorage = AccountStorage(SHELF)
+    accountStorage.chosen_account = account
+    return getattr(accountStorage, command)()
 
 
 if __name__ == '__main__':
