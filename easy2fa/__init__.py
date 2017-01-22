@@ -77,6 +77,9 @@ class AccountStorage(object):
         self._save_shelf()
 
     def remove(self):
+        if not self.accounts:
+            print('No accounts to remove.')
+            return 0
         name = self._get_account('Account to remove: ',
                                  self._ensure_has_account)
         del self.accounts[name]
@@ -87,8 +90,9 @@ class AccountStorage(object):
         if not self.accounts:
             print('Please add accounts before setting a default account.')
             return 1
-        account = self._get_account('Account to set as default: ',
-                                    self._ensure_has_account)
+        account = self._get_account('Account to set as default ',
+                                    self._ensure_has_account,
+                                    default=self.shelf['default'])
         self.shelf['default'] = account
         self._save_shelf()
 
@@ -241,7 +245,6 @@ def parse_args():
 
 def main():
     command, account = parse_args()
-    print(command, account)
     accountStorage = AccountStorage(SHELF)
     accountStorage.chosen_account = account
     return getattr(accountStorage, command)()
