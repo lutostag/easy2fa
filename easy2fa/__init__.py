@@ -21,8 +21,8 @@ commands:
 
 optional arguments:
   account          Name of account to be used with any of the above commands
-		   (except 'list', for which it is ignored). If not provided,
-		   will use default or fall back to asking interactively.
+                   (except 'list', for which it is ignored). If not provided,
+                   will use default or fall back to asking interactively.
   -h, --help       Show this help message and exit
 
 The accounts are stored in a yaml file located at '~/.config/easy2fa/accounts'
@@ -31,7 +31,7 @@ The accounts are stored in a yaml file located at '~/.config/easy2fa/accounts'
 
 def check_input(prompt, assertion=None, default=None):
     """Get input from cmdline, ensuring that it passes the given assertion.
-    
+
     assertion: a function that if given a value will return None if the check
     should pass, otherwise returning a helpful error message as a string."""
     if default is not None:
@@ -41,7 +41,7 @@ def check_input(prompt, assertion=None, default=None):
         value = input(prompt).strip()
         if value == "" and default is not None:
             value = default
-            
+
         if assertion is not None:
             check = assertion(value)
             if check is not None:
@@ -54,12 +54,12 @@ def check_input(prompt, assertion=None, default=None):
 
 
 class AccountStorage(object):
-    def __init__(self, filename):
+    def __init__(self, filename, chosen_account=None):
         self.filename = filename
         self._safety_check()
         self.shelf = None
         self.accounts = None
-        self.chosen_account = None
+        self.chosen_account = chosen_account
         self._load()
 
     def add(self):
@@ -67,7 +67,7 @@ class AccountStorage(object):
                                  self._ensure_new_account)
         secret = check_input('Secret: ')
         type_ = check_input("Type of Account, 'timer' or 'counter'",
-                              self._ensure_type, default='counter').lower()
+                            self._ensure_type, default='counter').lower()
         if type_ != 'timer':
             # start the counter at zero
             type_ = 0
@@ -101,7 +101,7 @@ class AccountStorage(object):
             print("Default: %s" % self.shelf['default'])
         for account in sorted(self.accounts.keys()):
             print(account)
-    
+
     def generate(self):
         name = self.chosen_account
         if not name:
@@ -127,7 +127,7 @@ class AccountStorage(object):
             raise
         self._show(otp)
         self.accounts[name] = secret, type_
-    
+
     def _update_default(self, account=None):
         if self.shelf.get('default') in self.accounts:
             return
@@ -174,7 +174,7 @@ class AccountStorage(object):
     def _save_shelf(self):
         with open(self.filename, 'w') as fd:
             yaml.dump(self.shelf, fd)
-    
+
     def _safety_check(self):
         dirname = os.path.dirname(self.filename)
         if os.path.isfile(self.filename):
@@ -185,7 +185,7 @@ class AccountStorage(object):
                 assert(os.stat(dirname).st_uid == os.geteuid())
                 assert(os.stat(dirname).st_gid == os.getegid())
                 assert(os.stat(dirname).st_mode == 0o040755)
-                #TODO: extend checks to be more discerning
+                # TODO: extend checks to be more discerning
             except AssertionError:
                 print("Aborting: Safety checks not met for %s" % self.filename)
                 raise
@@ -216,9 +216,10 @@ class AccountStorage(object):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(add_help=False, prefix_chars='-garld',
-        allow_abbrev=False, description='A simple two-factor auth client.',
-        usage="easy2fa [-h] [command] [account]", epilog=EPILOG,
+    parser = argparse.ArgumentParser(
+        add_help=False, prefix_chars='-garld', allow_abbrev=False,
+        description='A simple two-factor auth client.', epilog=EPILOG,
+        usage="easy2fa [-h] [command] [account]",
         formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument('--help', help=argparse.SUPPRESS, action='help')
@@ -245,8 +246,7 @@ def parse_args():
 
 def main():
     command, account = parse_args()
-    accountStorage = AccountStorage(SHELF)
-    accountStorage.chosen_account = account
+    accountStorage = AccountStorage(SHELF, account)
     return getattr(accountStorage, command)()
 
 
