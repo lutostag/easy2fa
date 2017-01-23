@@ -4,12 +4,12 @@ It copies the one-time-password to the clipboard and shows it with a notificatio
 
 dependencies:
 ```
-sudo apt install oathtool xclip python3
+sudo apt install oathtool xclip python3 python3-pip
 ```
 
 simply install by:
 ```
-sudo cp easy2fa/__init__.py /usr/local/bin/easy2fa
+pip3 install easy2fa
 ```
 
 Secrets are stored in "~/.config/easy2fa/accounts" as a yaml file.
