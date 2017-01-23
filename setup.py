@@ -10,5 +10,6 @@ setup(name='easy2fa',
       url='https://github.com/lutostag/easy2fa',
       packages=find_packages(),
       classifiers=['Programming Language :: Python :: 3.5'],
+      install_requires=['PyYAML'],
       entry_points={'console_scripts': ['easy2fa = easy2fa:main']}
       )
