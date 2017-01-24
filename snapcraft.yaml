@@ -15,7 +15,7 @@ apps:
 parts:
   easy2fa:
     plugin: python
-    source: git://github.com/lutostag/easy2fa
+    source: https://github.com/lutostag/easy2fa.git
     stage-packages:
       - oathtool
       - xclip
