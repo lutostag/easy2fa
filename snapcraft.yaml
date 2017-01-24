@@ -13,10 +13,11 @@ apps:
     plugs: [ unity7 ]
 
 parts:
-  otp:
+  easy2fa:
+    plugin: python
     source: git://github.com/lutostag/easy2fa
-    plugin: dump
     stage-packages:
       - oathtool
       - xclip
       - libnotify-bin
+      - python3-yaml
