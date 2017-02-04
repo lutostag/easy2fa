@@ -11,5 +11,6 @@ setup(name='easy2fa',
       packages=find_packages(),
       classifiers=['Programming Language :: Python :: 3.5'],
       install_requires=['PyYAML'],
-      entry_points={'console_scripts': ['easy2fa = easy2fa:main']}
+      entry_points={'console_scripts': ['easy2fa = easy2fa.cli:main',
+                                        'easy2fa-gui = easy2fa.gui:main']}
       )

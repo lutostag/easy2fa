@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Comment=Two-factor auth client
+Name=easy2fa
+GenericName=2fa client
+Exec=easy2fa.easy2fa-gui
+Icon=${SNAP}/meta/gui/icon.svg
+Terminal=false
+Type=Application
+StartupNotify=false
+Categories=Application;
+

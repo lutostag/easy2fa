@@ -64,7 +64,7 @@ class CLI(object):
         secret = check_input('Secret: ')
         type_ = check_input("Type of Account, 'timer' or 'counter'",
                             self._ensure_type, default='counter').lower()
-        self._show(self.storage.add(name, secret, type_))
+        _show(self.storage.add(name, secret, type_))
 
     def remove(self):
         """Remove an account"""
@@ -174,8 +174,8 @@ def parse_args():
 
 def main():
     command, account = parse_args()
-    accountStorage = AccountStorage(SHELF, chosen_account=account)
-    return getattr(accountStorage, command)()
+    cli = CLI(SHELF, chosen_account=account)
+    return getattr(cli, command)()
 
 
 if __name__ == '__main__':

@@ -50,7 +50,7 @@ def check_input(prompt, assertion=None):
 
     assertion: a function that if given a value will return None if the check
     should pass, otherwise returning a helpful error message as a string."""
-    args = "-dmenu -p '' -mesg"
+    args = "-dmenu -mesg '' -l -1 -fixed-num-lines -hide-scrollbar -i -bw 0 -p"
     error_msg = ""
 
     while True:
@@ -95,10 +95,10 @@ class GUI(CLI):
         self._show(self.storage.generate(account), account)
 
     def add(self):
-        name = check_input(create_prompt('New account name'),
+        name = check_input('New account name: ',
                            assertion=self._ensure_new_account)
 
-        secret = check_input(create_prompt('Secret'))
+        secret = check_input('Secret: ')
 
         type_ = choose(create_prompt('Type of account, "counter" or "timer"'),
                        ['counter', 'timer'], default='timer')

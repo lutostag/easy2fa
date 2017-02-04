@@ -1,5 +1,6 @@
 name: easy2fa
 version: master
+icon: snap/gui/easy2fa.svg
 summary: Easy to use two-factor-auth client for cli
 description: |
   A simple wrapper around oathtool for two-factor-auth. Please run
@@ -11,13 +12,18 @@ apps:
   easy2fa:
     command: easy2fa
     plugs: [ unity7 ]
+  easy2fa-gui:
+    command: desktop-launch easy2fa-gui
+    plugs: [ unity7 ]
 
 parts:
   easy2fa:
     plugin: python
     source: https://github.com/lutostag/easy2fa.git
+    after: [desktop-gtk2]
     stage-packages:
       - oathtool
       - xclip
       - libnotify-bin
       - python3-yaml
+      - rofi
