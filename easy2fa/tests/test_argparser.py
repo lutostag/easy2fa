@@ -3,7 +3,7 @@ from unittest.mock import patch
 from argparse import ArgumentParser
 
 import sys
-import easy2fa
+from easy2fa import cli
 
 
 class TestCmdlineParser(TestCase):
@@ -11,10 +11,10 @@ class TestCmdlineParser(TestCase):
         """Return the output of parsing the given args"""
         sys.argv = list(args)
         sys.argv.insert(0, 'easy2fa')
-        return easy2fa.parse_args()
+        return cli.parse_args()
 
     def test_commands(self):
-        for reserved in easy2fa.RESERVED:
+        for reserved in cli.RESERVED:
             self.assertEqual(self.__parse(reserved), (reserved, None))
 
     def test_default(self):
@@ -22,7 +22,7 @@ class TestCmdlineParser(TestCase):
 
     def test_pass_account(self):
         for account in ('one', 'two'):
-            for reserved in easy2fa.RESERVED:
+            for reserved in cli.RESERVED:
                 self.assertEqual(self.__parse(reserved, account),
                                  (reserved, account))
 

@@ -1,16 +1,16 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-import easy2fa
+from easy2fa import cli
 
 
 class TestCheckInput(TestCase):
     @patch('builtins.input')
     def test_default(self, mock_input):
         mock_input.return_value = ''
-        self.assertEquals(easy2fa.check_input('prompt', default='one'), 'one')
+        self.assertEquals(cli.check_input('prompt', default='one'), 'one')
         mock_input.return_value = 'two'
-        self.assertEquals(easy2fa.check_input('prompt', default='one'), 'two')
+        self.assertEquals(cli.check_input('prompt', default='one'), 'two')
 
     @patch('builtins.input')
     @patch('builtins.print')
@@ -20,6 +20,6 @@ class TestCheckInput(TestCase):
                 return 'use yes or no'
 
         mock_input.side_effect = ['input', '', 'no']
-        self.assertEquals(easy2fa.check_input('prompt', assertion=assertion),
+        self.assertEquals(cli.check_input('prompt', assertion=assertion),
                           'no')
         mock_print.assert_called_with('\tInvalid input: use yes or no')
