@@ -64,7 +64,8 @@ class CLI(object):
         secret = check_input('Secret: ')
         type_ = check_input("Type of Account, 'timer' or 'counter'",
                             self._ensure_type, default='counter').lower()
-        _show(self.storage.add(name, secret, type_))
+        self.storage.add(name, secret, type_)
+        self._show(self.storage.generate(name), name)
 
     def remove(self):
         """Remove an account"""

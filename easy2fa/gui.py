@@ -37,7 +37,7 @@ def choose(prompt, choices, default=None):
     if default is not None:
         row = choices.index(default)
         end = ' -selected-row %s' % (row)
-    cmd = 'rofi -dmenu -no-custom -format i -p ""' + end
+    cmd = 'rofi -dmenu -no-custom -hide-scrollbar -format i -p ""' + end
     output = run_with_input(shlex.split(cmd) + ['-mesg', prompt],
                             '\n'.join(choices))
     if output:
@@ -50,7 +50,7 @@ def check_input(prompt, assertion=None):
 
     assertion: a function that if given a value will return None if the check
     should pass, otherwise returning a helpful error message as a string."""
-    args = "-dmenu -mesg '' -l -1 -fixed-num-lines -hide-scrollbar -i -bw 0 -p"
+    args = "-dmenu -hide-scrollbar -l 1 -i -p"
     error_msg = ""
 
     while True:
@@ -79,7 +79,8 @@ class GUI(CLI):
         if default is not None:
             row = accounts.index(default)
             end = ' -selected-row %s' % (row + len(commands))
-        cmd = 'rofi -dmenu -no-custom -format i -u 0-2 -p ""' + end
+        cmd = 'rofi -dmenu -hide-scrollbar -no-custom -format i -u 0-2 -p ""'\
+            + end
         prompt = create_prompt('Select account to generate or command')
         output = run_with_input(shlex.split(cmd) + ['-mesg', prompt],
                                 COMMANDS + '\n'.join(accounts))

@@ -13,7 +13,7 @@ apps:
     command: easy2fa
     plugs: [ unity7 ]
   easy2fa-gui:
-    command: desktop-launch easy2fa-gui
+    command: desktop-launch $SNAP/bin/easy2fa-gui
     plugs: [ unity7 ]
 
 parts:
