@@ -30,7 +30,7 @@ parts:
         - xvfb
   rofi:
     plugin: autotools
-    source: https://github.com/DaveDavenport/rofi.git
+    source: https://github.com/lutostag/rofi.git
     after: [desktop-gtk2, xcb-util-xrm]
     prepare: |
       autoreconf -i
