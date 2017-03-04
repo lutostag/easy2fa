@@ -5,7 +5,7 @@ summary: Easy to use two-factor-auth client for cli
 description: |
   A simple wrapper around oathtool for two-factor-auth. Please run
   it once from the commandline to set up.
-grade: devel
+grade: stable
 confinement: strict
 
 apps:
