@@ -33,6 +33,7 @@ The accounts are stored in a yaml file located at '~/.config/easy2fa/accounts'
 ### Graphical
 You can also run it with a gui using [rofi](https://davedavenport.github.io/rofi/).
 Simply click on the icon after installed or run `easy2fa.gui`, here is an example screenshot:
+
 [![screenshot](https://cdn.rawgit.com/lutostag/easy2fa/69fc05f6/docs/screenshots/graphical.png)](https://github.com/lutostag/easy2fa/tree/master/docs/screenshots)
 
 ## Install
