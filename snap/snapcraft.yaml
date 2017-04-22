@@ -12,8 +12,8 @@ apps:
   easy2fa:
     command: easy2fa
     plugs: [ unity7 ] # for clipboard permissions
-  easy2fa-gui:
-    command: desktop-launch $SNAP/bin/easy2fa-gui
+  gui:
+    command: desktop-launch $SNAP/bin/easy2fa.gui
     plugs: [ unity7 ]
 
 parts:
