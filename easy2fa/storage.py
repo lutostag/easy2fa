@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
+import base64
 import os
+import re
 import subprocess
 import yaml
 
@@ -36,7 +38,8 @@ class AccountStorage(object):
         if type_ != 'timer':
             # start the counter at zero
             type_ = 0
-        self.accounts[name] = (secret, type_)
+        self.accounts[name] = (AccountStorage.__normalize_secret(secret),
+                               type_)
         self._update_default()
         self._save_shelf()
 
@@ -113,3 +116,12 @@ class AccountStorage(object):
         except AssertionError:
             print("Aborting: Format checks not met for %s" % self.filename)
             raise
+
+    @staticmethod
+    def __normalize_secret(secret):
+        secret = re.sub(r"\s+", "", secret, flags=re.UNICODE)
+        try:
+            secret = base64.b32encode(bytes.fromhex(secret))
+        except ValueError:
+            pass
+        return secret
