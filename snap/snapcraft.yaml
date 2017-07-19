@@ -19,7 +19,7 @@ apps:
 parts:
   xcb-util-xrm:
     plugin: autotools
-    source: https://github.com/lutostag/xcb-util-xrm.git
+    source: https://github.com/Airblader/xcb-util-xrm.git
     prepare: |
       ./autogen.sh
     build-packages:
@@ -30,7 +30,7 @@ parts:
         - xvfb
   rofi:
     plugin: autotools
-    source: https://github.com/lutostag/rofi.git
+    source: https://github.com/DaveDavenport/rofi.git
     after: [desktop-gtk2, xcb-util-xrm]
     prepare: |
       autoreconf -i
