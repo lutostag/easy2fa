@@ -34,6 +34,8 @@ parts:
     after: [desktop-gtk2, xcb-util-xrm]
     prepare: |
       autoreconf -i
+    configflags:
+      - --disable-check
     build-packages:
       - bison
       - flex
@@ -48,6 +50,7 @@ parts:
       - libxcb-icccm4-dev
       - libxcb-randr0-dev
       - libxcb-util0-dev
+      - librsvg2-dev
     stage-packages:
       - libc6
       - libcairo2
@@ -63,6 +66,7 @@ parts:
       - libxcb1
       - libxkbcommon-x11-0
       - libxkbcommon0
+      - librsvg2-common
   easy2fa:
     plugin: python
     source: https://github.com/lutostag/easy2fa.git
