@@ -37,4 +37,3 @@ class TestCmdlineParser(TestCase):
         self.__parse('generate', 'account', 'extra')
         mock_usage.assert_called_with()
         mock_exit.assert_called_with(2)
-
