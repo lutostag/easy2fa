@@ -1,5 +1,5 @@
 name: easy2fa
-version: master
+version: git
 icon: snap/gui/easy2fa.svg
 summary: Easy to use two-factor-auth client for cli
 description: |
