@@ -5,7 +5,7 @@ import subprocess
 import shlex
 from subprocess import PIPE
 
-from easy2fa.storage import SHELF, AccountStorage
+from easy2fa.storage import SHELF
 from easy2fa.cli import CLI
 
 COMMANDS = """  add       Add an account
@@ -18,8 +18,9 @@ def create_prompt(text):
     return '<span weight="bold">easy2fa:</span><span style="italic">' + \
            '%s</span>' % text
 
+
 def alert(text):
-    run_with_input(['rofi', '-e', 'easy2fa: %s' % text])
+    run_with_input(['rofi', '-normal-window', '-e', 'easy2fa: %s' % text])
     sys.exit(1)
 
 
@@ -33,11 +34,11 @@ def run_with_input(command, input_=''):
 
 def choose(prompt, choices, default=None):
     """Get an selection from a given set of choices"""
-    end = ""
+    cmd = 'rofi -normal-window -dmenu -no-custom -hide-scrollbar' \
+          ' -format i -p ""'
     if default is not None:
         row = choices.index(default)
-        end = ' -selected-row %s' % (row)
-    cmd = 'rofi -dmenu -no-custom -hide-scrollbar -format i -p ""' + end
+        cmd += ' -selected-row %s' % (row)
     output = run_with_input(shlex.split(cmd) + ['-mesg', prompt],
                             '\n'.join(choices))
     if output:
@@ -50,7 +51,7 @@ def check_input(prompt, assertion=None):
 
     assertion: a function that if given a value will return None if the check
     should pass, otherwise returning a helpful error message as a string."""
-    args = "-dmenu -hide-scrollbar -l 1 -i -p"
+    args = "-normal-window -dmenu -hide-scrollbar -l 1 -i -p"
     error_msg = ""
 
     while True:
@@ -75,12 +76,11 @@ class GUI(CLI):
         accounts = self.storage.list
         default = self.storage.default
         commands = ['add', 'remove', 'default']
-        end = ""
+        cmd = 'rofi -normal-window -dmenu -hide-scrollbar -no-custom' \
+              ' -format i -u 0-2 -p ""'
         if default is not None:
             row = accounts.index(default)
-            end = ' -selected-row %s' % (row + len(commands))
-        cmd = 'rofi -dmenu -hide-scrollbar -no-custom -format i -u 0-2 -p ""'\
-            + end
+            cmd += ' -selected-row %s' % (row + len(commands))
         prompt = create_prompt('Select account to generate or command')
         output = run_with_input(shlex.split(cmd) + ['-mesg', prompt],
                                 COMMANDS + '\n'.join(accounts))
@@ -110,16 +110,20 @@ class GUI(CLI):
         if not self.storage.accounts:
             alert('No accounts to remove.')
 
-        choice = choose(create_prompt('Select account to remove'),
-                        choices=self.storage.list, default=self.storage.default)
+        choice = choose(
+            create_prompt('Select account to remove'),
+            choices=self.storage.list, default=self.storage.default
+        )
         self.storage.remove(choice)
 
     def default(self):
         if not self.storage.accounts:
             alert('Please add accounts before setting a default account.')
 
-        choice = choose(create_prompt('Select account to set as default'),
-                        choices=self.storage.list, default=self.storage.default)
+        choice = choose(
+            create_prompt('Select account to set as default'),
+            choices=self.storage.list, default=self.storage.default
+        )
         self.storage.default = choice
 
 
