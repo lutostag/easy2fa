@@ -101,7 +101,7 @@ class AccountStorage(object):
 
     def _load(self):
         with open(self.filename, 'r') as fd:
-            self.shelf = yaml.load(fd)
+            self.shelf = yaml.safe_load(fd)
         if self.shelf is None:
             self.shelf = {'accounts': {}}
         assert(isinstance(self.shelf, dict))
